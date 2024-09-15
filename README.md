@@ -1,50 +1,17 @@
-# React + TypeScript + Vite
+# Basic Calendar App by Diego Verdaguer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a simple React/TypeScript based calendar app with the
+ability to create, update, and delete events. The project
+was initially built using Vite. Code cleanup and refactoring is
+pending.
 
-Currently, two official plugins are available:
+# How to Use
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. Download this repository
+2. CD into root folder and run `npm i` and `npm dev`
+3. Calendar will run on localhost. Events will be saved to local storage and persist between use.
 
-## Expanding the ESLint configuration
+# Future enhancements
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+I am planning on adding the ability to upload a media library (for books, movies, and series)
+with the ability to track progress every day.
