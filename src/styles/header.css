@@ -1,0 +1,23 @@
+.header {
+    position: fixed;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    z-index: 500;
+    height: 100px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: white;
+    border-bottom: black 1px solid;
+}
+
+.header-button {
+    background-color: white;
+    height: 50px;
+    border-radius: 25px;
+    border: black 1px solid;
+    padding: 10px;
+}
