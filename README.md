@@ -8,7 +8,7 @@ pending.
 # How to Use
 
 1. Download this repository
-2. CD into root folder and run `npm i` and `npm dev`
+2. CD into root folder and run `pnpm i` and `pnpm dev`
 3. Calendar will run on localhost. Events will be saved to local storage and persist between use.
 
 # Future enhancements
