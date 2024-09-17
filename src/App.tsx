@@ -3,19 +3,20 @@ import Calendar from "./components/Calendar";
 import PopUp from "./components/PopUp";
 import Header from "./components/Header";
 import { useState, useEffect } from "react";
+import { EventList } from "./datatypes";
 
 function App() {
   const [addEventDay, setEventDay] = useState("");
   const [eventId, setEventId] = useState(-1);
   const [currentDay, setCurrentDay] = useState(new Date());
-  const [eventItems, setEvents] = useState({ events: [] });
+  const [eventItems, setEvents] = useState<EventList>({
+    events: [],
+  });
 
   useEffect(() => {
     const items = localStorage.getItem("eventData");
     if (items) {
       setEvents(JSON.parse(items));
-    } else {
-      setEvents({ events: [] });
     }
   }, []);
 
@@ -29,6 +30,7 @@ function App() {
           id={eventId}
           setEventId={setEventId}
           eventItems={eventItems}
+          setEvents={setEvents}
         ></PopUp>
       )}
       <Calendar

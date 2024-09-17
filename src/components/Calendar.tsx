@@ -31,7 +31,7 @@ interface Props {
   setEventId: React.Dispatch<React.SetStateAction<number>>;
   setCurrentDay: React.Dispatch<React.SetStateAction<Date>>;
   currentDay: Date;
-  eventItems: { events: never[] };
+  eventItems: EventList;
 }
 
 function isLeapYear(year: number): boolean {

@@ -16,13 +16,21 @@ const eventOptions = [
 
 interface Props {
   day: string;
-  id: number;
   setEventDay: React.Dispatch<React.SetStateAction<string>>;
+  id: number;
   setEventId: React.Dispatch<React.SetStateAction<number>>;
-  eventItems: { events: never[] };
+  eventItems: EventList;
+  setEvents: React.Dispatch<React.SetStateAction<EventList>>;
 }
 
-const PopUp = ({ setEventDay, day, id, setEventId, eventItems }: Props) => {
+const PopUp = ({
+  setEventDay,
+  day,
+  id,
+  setEventId,
+  eventItems,
+  setEvents,
+}: Props) => {
   const [data, setData] = useState({
     date: day,
     endDate: "",
@@ -31,13 +39,12 @@ const PopUp = ({ setEventDay, day, id, setEventId, eventItems }: Props) => {
     note: "",
     endTime: "",
     startTime: "",
+    id: -1,
   });
 
-  const parsedEvents = eventItems as EventList;
-
-  if (id > -1 && !data.event) {
-    const idx = parsedEvents.events.findIndex((item) => item.id == id);
-    if (idx > -1) setData(parsedEvents.events[idx]);
+  if (id > -1 && data.id > -1) {
+    const idx = eventItems.events.findIndex((item) => item.id == id);
+    if (idx > -1) setData(eventItems.events[idx]);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
@@ -46,17 +53,19 @@ const PopUp = ({ setEventDay, day, id, setEventId, eventItems }: Props) => {
 
     // Parse data
     const event = data as Event;
-    event.id = parsedEvents.events.length + 1;
+    event.id = eventItems.events.length + 1;
     event.deleted = [];
     if (id > -1) {
       event.id = id;
-      const idx = parsedEvents.events.findIndex((item) => item.id == id);
-      parsedEvents.events[idx] = event;
+      const idx = eventItems.events.findIndex((item) => item.id == id);
+      const updatedEvents = eventItems;
+      updatedEvents.events[idx] = event;
+      setEvents(updatedEvents);
       setEventId(-1);
     } else {
-      parsedEvents.events.push(event);
+      setEvents({ events: [...eventItems.events, event] });
     }
-    const json = JSON.stringify(parsedEvents, null, 2);
+    const json = JSON.stringify(eventItems, null, 2);
 
     // Save to local storage
     localStorage.setItem("eventData", json);
@@ -66,18 +75,22 @@ const PopUp = ({ setEventDay, day, id, setEventId, eventItems }: Props) => {
   }
 
   function handleDelete(): void {
-    const idx = parsedEvents.events.findIndex((item) => item.id == id);
-    if (parsedEvents.events[idx].repeatable.length == 1) {
-      parsedEvents.events[idx].id = -2; // Safe way to 'delete' item
+    const idx = eventItems.events.findIndex((item) => item.id == id);
+    const updatedEvents = eventItems;
+    if (eventItems.events[idx].repeatable.length == 1) {
+      updatedEvents.events[idx].id = -2; // Safe way to 'delete' item
     }
-    parsedEvents.events[idx].deleted.push(day);
+    updatedEvents.events[idx].deleted.push(day);
+    setEvents(updatedEvents);
     setEventDay("");
     setEventId(-1);
   }
 
   function handleDeleteAll(): void {
-    const idx = parsedEvents.events.findIndex((item) => item.id == id);
-    parsedEvents.events[idx].id = -2; // Safe way to 'delete' item
+    const idx = eventItems.events.findIndex((item) => item.id == id);
+    const updatedEvents = eventItems;
+    updatedEvents.events[idx].id = -2; // Safe way to 'delete' item
+    setEvents(updatedEvents);
     setEventDay("");
     setEventId(-1);
   }
