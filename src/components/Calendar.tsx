@@ -90,11 +90,8 @@ const Calendar = ({
   const month = currentDay.getMonth();
   const year = currentDay.getFullYear();
 
-  const parsedEvents = eventItems as EventList;
-  console.log(parsedEvents);
-
   function filterEvents(date: string): Event[] {
-    const events = parsedEvents.events.filter((item) => {
+    const events = eventItems.events.filter((item) => {
       const dayOfWeek = new Date(date).getDay();
       const rangeBool =
         item.date <= date && (!item.endDate || date <= item.endDate);

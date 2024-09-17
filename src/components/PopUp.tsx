@@ -42,9 +42,16 @@ const PopUp = ({
     id: -1,
   });
 
-  if (id > -1 && data.id > -1) {
+  if (id > -1 && data.id == -1) {
     const idx = eventItems.events.findIndex((item) => item.id == id);
     if (idx > -1) setData(eventItems.events[idx]);
+  }
+
+  console.log(data);
+
+  function saveToStorage(events: EventList): void {
+    const json = JSON.stringify(events, null, 2);
+    localStorage.setItem("eventData", json);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
@@ -55,20 +62,21 @@ const PopUp = ({
     const event = data as Event;
     event.id = eventItems.events.length + 1;
     event.deleted = [];
+    let updatedEvents: EventList;
     if (id > -1) {
       event.id = id;
       const idx = eventItems.events.findIndex((item) => item.id == id);
-      const updatedEvents = eventItems;
+      updatedEvents = eventItems;
       updatedEvents.events[idx] = event;
       setEvents(updatedEvents);
       setEventId(-1);
     } else {
-      setEvents({ events: [...eventItems.events, event] });
+      updatedEvents = { events: [...eventItems.events, event] };
+      setEvents(updatedEvents);
     }
-    const json = JSON.stringify(eventItems, null, 2);
 
     // Save to local storage
-    localStorage.setItem("eventData", json);
+    saveToStorage(updatedEvents);
 
     // Close the Popup
     setEventDay("");
@@ -77,10 +85,13 @@ const PopUp = ({
   function handleDelete(): void {
     const idx = eventItems.events.findIndex((item) => item.id == id);
     const updatedEvents = eventItems;
+
     if (eventItems.events[idx].repeatable.length == 1) {
       updatedEvents.events[idx].id = -2; // Safe way to 'delete' item
     }
+
     updatedEvents.events[idx].deleted.push(day);
+    saveToStorage(updatedEvents);
     setEvents(updatedEvents);
     setEventDay("");
     setEventId(-1);
@@ -90,6 +101,8 @@ const PopUp = ({
     const idx = eventItems.events.findIndex((item) => item.id == id);
     const updatedEvents = eventItems;
     updatedEvents.events[idx].id = -2; // Safe way to 'delete' item
+
+    saveToStorage(updatedEvents);
     setEvents(updatedEvents);
     setEventDay("");
     setEventId(-1);
@@ -126,7 +139,7 @@ const PopUp = ({
                   key={index}
                   name={`repeatable-${item}`}
                   className="repeatable-picker"
-                  onClick={() => {
+                  onChange={() => {
                     const { repeatable, ...rest } = data;
                     const search = repeatable.indexOf(index);
                     if (search > -1) {
@@ -136,6 +149,7 @@ const PopUp = ({
                     }
                     setData({ repeatable: repeatable, ...rest });
                   }}
+                  checked={data.repeatable.indexOf(index) > -1}
                 ></input>
                 <label htmlFor={`repeatable-${item}`}>{item}</label>
               </div>
