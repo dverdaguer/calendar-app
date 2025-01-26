@@ -1,5 +1,6 @@
 import "../styles/calendar.css";
 import { EventList, Event } from "../datatypes";
+import { useState } from "react";
 
 const monthLengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 const daysOfWeek = [
@@ -90,6 +91,8 @@ const Calendar = ({
   const month = currentDay.getMonth();
   const year = currentDay.getFullYear();
 
+  const [hoverDay, setHoverday] = useState(-1);
+
   function filterEvents(date: string): Event[] {
     const events = eventItems.events.filter((item) => {
       const dayOfWeek = new Date(date).getDay();
@@ -137,13 +140,21 @@ const Calendar = ({
 
             return (
               <div
-                className={`grid-item ${item == -1 && "inactive"} ${
-                  key == todayKey && "current"
+                className={`grid-item ${item == -1 && "inactive"}
                 }`}
                 key={index}
                 onClick={() =>
                   item !== -1 ? setEventDay(key) : setEventDay("")
                 }
+                onMouseEnter={() => setHoverday(item)}
+                onMouseLeave={() => setHoverday(-1)}
+                style={{
+                  backgroundColor:
+                    item == hoverDay || key == todayKey
+                      ? "rgb(231, 240, 255)"
+                      : "white",
+                  transition: "background-color 0.3s",
+                }}
               >
                 <div className="date-item" key={index}>
                   {item}
